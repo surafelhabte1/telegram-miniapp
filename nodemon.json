@@ -1,0 +1,5 @@
+{
+  "watch": ["*.ts", "src"],
+  "ext": "ts",
+  "exec": "node --loader ts-node/esm bot.ts"
+}

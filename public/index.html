@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Telegram Mini App</title>
+</head>
+<body>
+  <h3 id="hello">Hello!</h3>
+  <input id="note" placeholder="Type your note"/>
+  <button id="send">Send to Bot</button>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+    tg.ready();
+
+    document.getElementById("hello").textContent =
+      `Hi ${tg.initDataUnsafe?.user?.first_name || 'there'}!`;
+
+    document.getElementById("send").onclick = () => {
+      const noteValue = document.getElementById("note").value;
+      tg.sendData(JSON.stringify({ note: noteValue }));
+      tg.close();
+    };
+  </script>
+</body>
+</html>

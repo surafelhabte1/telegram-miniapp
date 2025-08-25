@@ -1,5 +1,6 @@
-import { Telegraf, Context } from "telegraf";
+import "dotenv/config";
 import express from "express";
+import { Telegraf, Context } from "telegraf";
 
 const BOT_TOKEN = process.env.BOT_TOKEN as string;
 const WEBAPP_URL = process.env.WEBAPP_URL as string;
@@ -10,26 +11,28 @@ if (!BOT_TOKEN || !WEBAPP_URL) {
 
 const bot = new Telegraf<Context>(BOT_TOKEN);
 
-// Send "Open App" button
+// Start command: send a button to open mini app
 bot.start((ctx) =>
   ctx.reply("Open the mini app:", {
     reply_markup: {
-      inline_keyboard: [[{ text: "Open", web_app: { url: WEBAPP_URL } }]],
+      inline_keyboard: [[{ text: "Open Mini App", web_app: { url: WEBAPP_URL } }]],
     },
   })
 );
 
-// Handle data sent from WebApp (tg.sendData)
+// Receive data sent via WebApp
 bot.on("message", (ctx) => {
   const data = (ctx.message as any)?.web_app_data?.data;
   if (data) {
-    ctx.reply(`Received: ${data}`);
+    const parsed = JSON.parse(data);
+    const note = parsed.note;
+    ctx.reply(`Received your note: ${note}`);
   }
 });
 
 bot.launch();
 
-// Optional: serve index.html from ./public
+// Optional: serve web app from ./public
 const app = express();
 app.use(express.static("public"));
 app.listen(3000, () => console.log("Web server running on http://localhost:3000"));

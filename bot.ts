@@ -24,6 +24,7 @@ bot.start((ctx) =>
 bot.on("message", (ctx) => {
   const data = (ctx.message as any)?.web_app_data?.data;
   if (data) {
+    console.log('%cbot.ts:27 data', 'color: #007acc;', data);
     const parsed = JSON.parse(data);
     const note = parsed.note;
     ctx.reply(`Received your note: ${note}`);

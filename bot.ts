@@ -12,13 +12,13 @@ if (!BOT_TOKEN || !WEBAPP_URL) {
 const bot = new Telegraf<Context>(BOT_TOKEN);
 
 // Start command: send a button to open mini app
-bot.start((ctx) =>
-  ctx.reply("Open the mini app:", {
-    reply_markup: {
-      inline_keyboard: [[{ text: "Open Mini App", web_app: { url: WEBAPP_URL } }]],
-    },
-  })
-);
+// bot.start((ctx) =>
+//   ctx.reply("Open the mini app:", {
+//     reply_markup: {
+//       inline_keyboard: [[{ text: "Open Mini App", web_app: { url: WEBAPP_URL } }]],
+//     },
+//   })
+// );
 
 // Receive data sent via WebApp
 bot.on("message", (ctx) => {

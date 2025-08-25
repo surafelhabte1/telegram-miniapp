@@ -11,15 +11,6 @@ if (!BOT_TOKEN || !WEBAPP_URL) {
 
 const bot = new Telegraf<Context>(BOT_TOKEN);
 
-// Start command: send a button to open mini app
-// bot.start((ctx) =>
-//   ctx.reply("Open the mini app:", {
-//     reply_markup: {
-//       inline_keyboard: [[{ text: "Open Mini App", web_app: { url: WEBAPP_URL } }]],
-//     },
-//   })
-// );
-
 // Receive data sent via WebApp
 bot.on("message", (ctx) => {
   const data = (ctx.message as any)?.web_app_data?.data;
@@ -37,3 +28,5 @@ bot.launch();
 const app = express();
 app.use(express.static("public"));
 app.listen(3000, () => console.log("Web server running on http://localhost:3000"));
+
+export default app;

@@ -23,7 +23,7 @@
           const container = document.getElementById("news-list");
           container.innerHTML = "";
 
-          data.articles.forEach((article) => {
+          data.articles?.forEach((article) => {
             const div = document.createElement("div");
             div.className = "bg-white rounded shadow overflow-hidden";
 

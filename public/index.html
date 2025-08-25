@@ -1,27 +1,36 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Telegram Mini App</title>
-</head>
-<body>
-  <h3 id="hello">Hello!</h3>
-  <input id="note" placeholder="Type your note"/>
-  <button id="send">Send to Bot</button>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>News Mini App</title>
+  </head>
+  <body>
+    <h2>Top Headlines</h2>
+    <ul id="news-list"></ul>
 
-  <script>
-    const tg = window.Telegram.WebApp;
-    tg.expand();
-    tg.ready();
+    <script>
+      const API_KEY = "479e3573989d49dd93e71fe4b78bef4a";
+      const url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`;
 
-    document.getElementById("hello").textContent =
-      `Hi ${tg.initDataUnsafe?.user?.first_name || 'there'}!`;
+      async function fetchNews() {
+        try {
+          const res = await fetch(url);
+          const data = await res.json();
 
-    document.getElementById("send").onclick = () => {
-      const noteValue = document.getElementById("note").value;
-      tg.sendData(JSON.stringify({ note: noteValue }));
-      tg.close();
-    };
-  </script>
-</body>
+          const ul = document.getElementById("news-list");
+          data.articles.forEach((article) => {
+            const li = document.createElement("li");
+            li.innerHTML = `<a href="${article.url}" target="_blank">${article.title}</a>`;
+            ul.appendChild(li);
+          });
+        } catch (err) {
+          console.error(err);
+          document.getElementById("news-list").innerText =
+            "Failed to load news";
+        }
+      }
+
+      fetchNews();
+    </script>
+  </body>
 </html>

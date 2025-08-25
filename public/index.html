@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>News Mini App</title>
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
-    <h2>Top Headlines</h2>
-    <ul id="news-list"></ul>
+  <body class="bg-gray-100 p-4">
+    <h1 class="text-2xl font-bold mb-4">Top Headlines</h1>
+    <div id="news-list" class="grid grid-cols-1 gap-4"></div>
 
     <script>
       const API_KEY = "479e3573989d49dd93e71fe4b78bef4a";
@@ -17,16 +20,46 @@
           const res = await fetch(url);
           const data = await res.json();
 
-          const ul = document.getElementById("news-list");
+          const container = document.getElementById("news-list");
+          container.innerHTML = "";
+
           data.articles.forEach((article) => {
-            const li = document.createElement("li");
-            li.innerHTML = `<a href="${article.url}" target="_blank">${article.title}</a>`;
-            ul.appendChild(li);
+            const div = document.createElement("div");
+            div.className = "bg-white rounded shadow overflow-hidden";
+
+            // Thumbnail on top
+            const img = document.createElement("img");
+            img.src =
+              article.urlToImage || "https://via.placeholder.com/300x150";
+            img.className = "w-full h-48 object-cover";
+            div.appendChild(img);
+
+            // Content
+            const content = document.createElement("div");
+            content.className = "p-4";
+
+            const title = document.createElement("a");
+            title.href = article.url;
+            title.target = "_blank";
+            title.className =
+              "font-semibold text-lg text-blue-600 hover:underline";
+            title.textContent = article.title;
+            content.appendChild(title);
+
+            if (article.description) {
+              const desc = document.createElement("p");
+              desc.className = "text-gray-700 text-sm mt-2";
+              desc.textContent = article.description;
+              content.appendChild(desc);
+            }
+
+            div.appendChild(content);
+            container.appendChild(div);
           });
         } catch (err) {
           console.error(err);
           document.getElementById("news-list").innerText =
-            "Failed to load news";
+            "Failed to load news.";
         }
       }
 
